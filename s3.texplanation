@@ -1,0 +1,152 @@
+resource "aws_s3_bucket" "example" {
+  bucket = "my-tf-test-bucket"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
+
+#Customise according to your requirement
+- region is us-west-2
+- Encryption is kms
+- naming convention shoud be -
+   - bootcamp32-${env}-${random.int}
+
+KMS ENCRYPTION
+================
+Under terraform aws s3 bucket documentation
+- search documentation for creating s3 as a resource
+- search/scroll example for encription syntax
+
+RANDOM INTEGER
+===============
+- search terraform for syntax
+terraform random integer
+random_integer (Resource)
+
+# The following example shows how to generate a random priority
+# between 1 and 50000 for a aws_alb_listener_rule resource:
+
+resource "random_integer" "priority" {
+min = 1
+max = 50000
+keepers = {
+# Generate a new integer each time we switch to a new listener ARN
+listener_arn = var.listener_arn
+}
+}
+
+Attribute:
+#result (Number) The random integer result.
+-------------------------===================================
+
+resource "aws_s3_bucket" "example" {
+bucket = "my-tf-test-bucket"
+
+tags = {
+Name        = "My bucket"
+Environment = "Dev"
+}
+}
+
+#aws_s3_bucket_server_side_encryption_configuration
+resource "aws_kms_key" "mykey" {
+description             = "This key is used to encrypt bucket objects"
+deletion_window_in_days = 10
+}
+
+resource "aws_s3_bucket" "mybucket" {
+bucket = "mybucket"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+bucket = aws_s3_bucket.mybucket.id
+
+rule {
+apply_server_side_encryption_by_default {
+kms_master_key_id = aws_kms_key.mykey.arn
+sse_algorithm     = "aws:kms"
+}
+}
+}
+
+
+#Let us customise it with our s3 bucket example above
+#Requirements
+ #- region is us-west-2
+ #- Encryption is kms
+ #- naming convention shoud be -
+ #- bootcamp32-${env}-${random.int}
+resource "aws_s3_bucket" "backend" {
+bucket = "bootcamp32-${var.env}-${random_integer.backend.result}"
+
+tags = {
+Name        = "backend"
+Environment = "Dev"
+}
+}
+
+resource "aws_kms_key" "mykey" {
+description             = "This key is used to encrypt bucket objects"
+deletion_window_in_days = 10
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
+bucket = aws_s3_bucket.backend.id
+
+rule {
+apply_server_side_encryption_by_default {
+kms_master_key_id = aws_kms_key.mykey.arn
+sse_algorithm     = "aws:kms"
+}
+}
+}
+# The following example shows how to generate a random priority
+# between 1 and 50000 for a aws_alb_listener_rule resource:
+
+resource "random_integer" "backend" {
+min = 1
+max = 50000
+keepers = {
+# Generate a new number when there is a change in the environment variable
+Environment = var.env
+}
+}
+#result (Number) The random integer result.
+
+variable "env" {
+  type = "string"
+  description = "operating environment"
+  default = "dev"
+}
+
+Terraform functions
+====================
+lower Function
+> lower("HELLO")
+hello
+bucket = "bootcamp32-${lower(var.env)}-${random_integer.backend.result}"
+
+.gitignore
+===========
+create .gitignore file to track all files you
+want untracked.
+
+git init
+git branch -M main
+git add .
+git commit
+git tag -a v1.0.0 -m "backend"
+
+Sign into your github account
+Create a new repository "s3-remote-backend"
+copy "git remote add origin https://github.com/steph.........."
+git remote add origin https://github.com/steph-nnamani/s3-remote-backend.gi
+
+Go to your local workspace and paste
+git remote -v #you will see remote repo
+git push -u origin main --follow-tags
+
+
+
