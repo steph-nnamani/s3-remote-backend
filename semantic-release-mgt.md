@@ -67,7 +67,8 @@ git add .
 git commit -m "fix: semantic release for bug fixed"     #customize for requirement
 git push
 
-#For manual releases. Go to Github > Actions > Run workflow
+#For manual releases. Go to Github > Actions > All workflows
+> release > Run workflow
 
 Project/Ticket 001: ADD A NEW FEATURE TO THE S3 BUCKET
 ==================
