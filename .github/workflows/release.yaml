@@ -1,0 +1,17 @@
+name: release
+on: [workflow_dispatch]         #manual trigger
+#This is for manual releases. Go to Github > Actions > Run workflow
+jobs:
+  release:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
